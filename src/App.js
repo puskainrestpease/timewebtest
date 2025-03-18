@@ -11,8 +11,8 @@ function App() {
       <Header />
       <main>
         <section id="about">
-          <h2>About Me</h2>
-          <p>Hi! I'm Maxim, 17 y.o. developer from Moscow</p>
+          <h2>About me</h2>
+          <p>Меня зовут Максим, в данный момент являюсь студентом колледжа. Учусь :0</p>
         </section>
         <Projects />
         <Contact />
