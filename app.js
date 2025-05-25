@@ -1,4 +1,3 @@
-// app.js
 class SharagaApp {
     constructor() {
         this.token = null;
@@ -8,27 +7,17 @@ class SharagaApp {
 
     async init() {
         try {
-            // Инициализация Telegram WebApp
             if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
             }
-
-            // Получение токена из URL
             this.token = new URLSearchParams(window.location.search).get('token');
-            
             if (!this.token) {
                 this.showAccessDenied();
                 return;
             }
-
-            // Загрузка информации о пользователе
             await this.loadUserInfo();
-            
-            // Инициализация интерфейса
             this.initInterface();
-            
-            // Загрузка начальных данных
             await this.loadHomework();
             await this.loadDutySchedule();
 
@@ -59,34 +48,24 @@ class SharagaApp {
         const avatar = document.getElementById('user-avatar');
         const username = document.getElementById('username');
         const stats = document.getElementById('user-stats');
-
-        // Генерация аватара
         const firstLetter = this.user.first_name?.charAt(0) || this.user.username?.charAt(0) || '?';
         avatar.textContent = firstLetter.toUpperCase();
-
-        // Отображение имени
         const displayName = this.user.username || 'Пользователь';
         const fullName = this.user.first_name ? ` (${this.user.first_name})` : '';
         username.textContent = displayName + fullName;
-
-        // Статистика
         const adminBadge = this.user.is_admin ? ' 👑' : '';
         stats.textContent = `Команд выполнено: ${this.user.command_count}${adminBadge}`;
     }
 
     initInterface() {
-        // Навигация между страницами
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 const page = item.dataset.page;
                 this.switchPage(page);
             });
         });
-
-        // GPT отправка сообщений
         const sendBtn = document.getElementById('send-gpt');
         const input = document.getElementById('gpt-input');
-        
         sendBtn.addEventListener('click', () => this.sendGPTMessage());
         input.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -99,19 +78,13 @@ class SharagaApp {
     }
 
     switchPage(pageName) {
-        // Скрыть все страницы
         document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');
         });
-        
-        // Показать выбранную страницу
         document.getElementById(`${pageName}-page`).classList.add('active');
-        
-        // Обновить навигацию
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
-        
         document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
     }
 
@@ -160,16 +133,10 @@ class SharagaApp {
         const input = document.getElementById('gpt-input');
         const messagesContainer = document.getElementById('chat-messages');
         const prompt = input.value.trim();
-
         if (!prompt) return;
-
-        // Добавить сообщение пользователя
         this.addMessage(prompt, 'user');
         input.value = '';
-
-        // Показать индикатор загрузки
         const loadingMsg = this.addMessage('Думаю...', 'assistant');
-
         try {
             const response = await fetch('/api/gpt', {
                 method: 'POST',
@@ -181,18 +148,13 @@ class SharagaApp {
                     token: this.token
                 })
             });
-
             const data = await response.json();
-            
-            // Заменить загрузку на ответ
             loadingMsg.textContent = data.response;
-
         } catch (error) {
             loadingMsg.textContent = '❌ Ошибка получения ответа';
             loadingMsg.style.color = '#e74c3c';
         }
     }
-
     addMessage(text, type) {
         const messagesContainer = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
@@ -204,7 +166,6 @@ class SharagaApp {
         
         return messageDiv;
     }
-
     async loadDutySchedule() {
         try {
             const response = await fetch(`/api/duty?token=${this.token}`);
@@ -215,7 +176,6 @@ class SharagaApp {
             console.error('Ошибка загрузки дежурных:', error);
         }
     }
-
     displayDutySchedule(data) {
         const container = document.getElementById('duty-content');
         
@@ -261,25 +221,19 @@ class SharagaApp {
         
         container.innerHTML = html;
     }
-
     hideLoading() {
         document.getElementById('loading').classList.add('hidden');
     }
-
     showAccessDenied() {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('access-denied').classList.remove('hidden');
     }
 }
-
-// Глобальные функции
 window.loadHomework = async function() {
     if (window.app) {
         await window.app.loadHomework();
     }
 };
-
-// Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new SharagaApp();
 });
