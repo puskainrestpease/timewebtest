@@ -1,5 +1,0 @@
-{
-    "root": "build/",
-    "routes": { "/**": "index.html" },
-    "engines": { "node": "16.x" }
-}
