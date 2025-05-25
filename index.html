@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharaga Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="loading" class="loading-screen">
+            <div class="spinner"></div>
+            <p>Загрузка...</p>
+        </div>
+        <div id="access-denied" class="access-denied hidden">
+            <div class="error-icon">❌</div>
+            <h2>У вас нет доступа</h2>
+            <p>Извините, но вы не зарегистрированы в системе</p>
+        </div>
+        <div id="main-app" class="main-app hidden">
+            <header class="user-header">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar"></div>
+                    <div class="user-details">
+                        <div class="username" id="username"></div>
+                        <div class="user-stats" id="user-stats"></div>
+                    </div>
+                </div>
+            </header>
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-page="homework">
+                    <span class="nav-icon">📚</span>
+                    <span class="nav-label">Домашка</span>
+                </button>
+                <button class="nav-item" data-page="schedule">
+                    <span class="nav-icon">📅</span>
+                    <span class="nav-label">Расписание</span>
+                </button>
+                <button class="nav-item" data-page="gpt">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-label">GPT</span>
+                </button>
+                <button class="nav-item" data-page="duty">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Дежурные</span>
+                </button>
+            </nav>
+            <main class="content">
+                <div id="homework-page" class="page active">
+                    <div class="page-header">
+                        <h1>📚 Домашние задания</h1>
+                        <button class="refresh-btn" onclick="loadHomework()">🔄</button>
+                    </div>
+                    <div id="homework-content" class="homework-content">
+                        <div class="loading-placeholder">Загрузка заданий...</div>
+                    </div>
+                </div>
+
+                <div id="schedule-page" class="page">
+                    <div class="page-header">
+                        <h1>📅 Расписание</h1>
+                    </div>
+                    <div class="schedule-image">
+                        <img src="http://83.217.220.161:8000/static/schedule/raspisanie.jpg" alt="Расписание" />
+                    </div>
+                </div>
+                <div id="gpt-page" class="page">
+                    <div class="page-header">
+                        <h1>🤖 AI Помощник</h1>
+                    </div>
+                    <div class="chat-container">
+                        <div id="chat-messages" class="chat-messages"></div>
+                        <div class="chat-input-container">
+                            <textarea id="gpt-input" placeholder="Задайте вопрос..."></textarea>
+                            <button id="send-gpt" class="send-btn">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="duty-page" class="page">
+                    <div class="page-header">
+                        <h1>👥 Дежурные</h1>
+                    </div>
+                    <div id="duty-content" class="duty-content">
+                        <div class="loading-placeholder">Загрузка дежурных...</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="static/app.js"></script>
+</body>
+</html>
